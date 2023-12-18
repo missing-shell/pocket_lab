@@ -1,0 +1,75 @@
+dependencies:
+  espressif/cmake_utilities:
+    component_hash: 351350613ceafba240b761b4ea991e0f231ac7a9f59a9ee901f751bddc0bb18f
+    source:
+      service_url: https://api.components.espressif.com/
+      type: service
+    version: 0.5.3
+  espressif/esp_codec_dev:
+    component_hash: bfa92c177f836be5847e4a4248349267614500e1e0728c4939e51a73746b8918
+    source:
+      service_url: https://api.components.espressif.com/
+      type: service
+    version: 1.0.3
+  espressif/esp_lvgl_port:
+    component_hash: b43dc04720d126cbfe14d53a84787e4c24b7bd7f15468e224c930ad3ffb32258
+    source:
+      service_url: https://api.components.espressif.com/
+      type: service
+    version: 1.4.0
+  espressif__button:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__button
+      type: local
+    version: 3.1.3
+  espressif__cmake_utilities:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__cmake_utilities
+      type: local
+    version: 0.5.3
+  espressif__esp32-camera:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__esp32-camera
+      type: local
+    version: 2.0.6
+  espressif__esp32_s3_eye:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__esp32_s3_eye
+      type: local
+    version: 3.0.3~1
+  espressif__esp_codec_dev:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__esp_codec_dev
+      type: local
+    version: 1.0.3
+  espressif__esp_lvgl_port:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\espressif__esp_lvgl_port
+      type: local
+    version: 1.4.0
+  idf:
+    component_hash: null
+    source:
+      type: idf
+    version: 5.1.1
+  lvgl/lvgl:
+    component_hash: 948bff879a345149b83065535bbc4a026ce9f47498a22881e432a264b9098015
+    source:
+      service_url: https://api.components.espressif.com/
+      type: service
+    version: 8.3.11
+  lvgl__lvgl:
+    component_hash: null
+    source:
+      path: E:\All_Project\ESP32\pocker_lab\E53\components\lvgl__lvgl
+      type: local
+    version: 8.3.11
+manifest_hash: b91375b6eee017a6bb5b622d74eb7cbc4670bea25bbe713739819974475c367c
+target: esp32s3
+version: 1.0.0
