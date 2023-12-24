@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/CMakeFiles/bootloader
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/CMakeFiles/bootloader.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/CMakeFiles/bootloader-complete.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

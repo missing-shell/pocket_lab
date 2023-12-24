@@ -1,0 +1,12 @@
+{
+    "idf.flashType": "UART",
+    "idf.portWin": "COM3",
+    "idf.adapterTargetName": "esp32c6",
+    "idf.openOcdConfigs": [
+        "board/esp32c6-ftdi.cfg"
+    ],
+    "idf.espIdfPathWin": "e:\\Espressif\\v5.1.1\\esp-idf",
+    "files.associations": {
+        "semphr.h": "c"
+    }
+}
