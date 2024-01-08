@@ -1,7 +1,7 @@
 {
     "version":            "1",
     "project_name":       "v1.1_uart_TJC",
-    "project_version":    "98c8ac9-dirty",
+    "project_version":    "ffc7e77-dirty",
     "project_path":       "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun",
     "idf_path":           "E:/Espressif/v5.1.1/esp-idf",
     "build_dir":          "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build",
@@ -790,7 +790,7 @@
             "managed_reqs": [],
             "managed_priv_reqs": [],
             "file": "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/build/esp-idf/main/libmain.a",
-            "sources": [ "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/user_mqtt.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/main.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/i2c_master.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/i2c_senor.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/wifi_station.c" ],
+            "sources": [ "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/user_mqtt.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/main.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/i2c_master.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/i2c_senor.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/wifi_station.c", "E:/All_Project/ESP32/pocker_lab/TEST_C6/v1.1_aliyun/main/mytask_list.c" ],
             "include_dirs": [ "." ]
         },
         "mbedtls": {

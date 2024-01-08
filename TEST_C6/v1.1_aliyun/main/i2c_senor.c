@@ -8,14 +8,9 @@
 
 static const char *BH1750_TAG = "BH1750";
 static const char *SHT35_TAG = "SHT35_DIS_B";
-static const char *MCP4725_TAG = "MCP4725";
 static const char *INA3221_TAG = "INA3221";
 
-float bh1760_lux;
-double sht35_val[2];
-int dac_val;
-double bus_val[3], shunt_val[3];
-
+QueueHandle_t sensorQueue;
 
 /*************************************************BH1750**********************************************************/
 /*test code to operate on BH1750 sensor*/
@@ -46,10 +41,10 @@ static esp_err_t i2c_master_sensor_BH1750(i2c_port_t i2c_num, uint8_t *data_h, u
 }
 
 /*BH1750*/
-void i2c_BH1750_task(void *arg)
+static void i2c_BH1750_task(void *arg)
 {
     int ret;
-    //int task_idx = (int)arg;
+
     uint8_t sensor_data_h = 0, sensor_data_l = 0; // BH1750
     while (1)
     {
@@ -60,14 +55,17 @@ void i2c_BH1750_task(void *arg)
         }
         else if (ret == ESP_OK)
         {
-            bh1760_lux = (sensor_data_h << 8 | sensor_data_l) / 1.2;
+            // Read BH1750 data
+            SensorData BH1750;
+            BH1750.type = DATA_TYPE_BH1750;
+            BH1750.data.bh1750_lux = (sensor_data_h << 8 | sensor_data_l) / 1.2;
+            xQueueSend(sensorQueue, &BH1750, portMAX_DELAY);
         }
         else
         {
             ESP_LOGW(BH1750_TAG, "%s: No ack, sensor not connected...skip...", esp_err_to_name(ret)); // Print warning message if no acknowledgement is received
         }
-        //vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS); // Delay between different test items
-        //---------------------------------------------------
+        vTaskDelay((DELAY_ITEMS_MS / portTICK_PERIOD_MS));
     }
     vTaskDelete(NULL);
 }
@@ -147,12 +145,10 @@ static uint8_t calculate_crc(uint8_t *data, uint8_t len)
 static void i2c_SHT35_task(void *arg)
 {
     int ret;
-    //int task_idx = (int)arg;
     uint8_t buff[6];
     while (1)
     {
         ret = i2c_master_sensor_SHT35(I2C_MASTER_NUM, buff); // Perform I2C sensor test
-        // xSemaphoreTake(print_mux, portMAX_DELAY);
         if (ret == ESP_ERR_TIMEOUT)
         {
             ESP_LOGE(SHT35_TAG, "I2C Timeout"); // Print error message if I2C timeout occurs
@@ -163,74 +159,25 @@ static void i2c_SHT35_task(void *arg)
         }
         else if (ret == ESP_OK)
         {
-            uint16_t rawTemperature = (((uint16_t)buff[0] << 8) | buff[1]);          // Combine the two bytes to get the raw temperature value
-            uint16_t rawHumidity = (((uint16_t)buff[3] << 8) | buff[4]);             // Combine the two bytes to get the raw humidity value
-            double actualTemperature = -45 + 175 * ((double)rawTemperature / 65536); // Convert raw temperature to actual temperature
-            double actualHumidity = 100 * ((double)rawHumidity / 65536);             // Convert raw humidity to actual humidity
-            sht35_val[0] = actualTemperature;
-            sht35_val[1] = actualHumidity;
+            uint16_t rawTemperature = (((uint16_t)buff[0] << 8) | buff[1]); // Combine the two bytes to get the raw temperature value
+            uint16_t rawHumidity = (((uint16_t)buff[3] << 8) | buff[4]);    // Combine the two bytes to get the raw humidity value
+
+            // Read SHT35 data
+            SensorData SHT35;
+            SHT35.type = DATA_TYPE_SHT35;
+            SHT35.data.sht35_val[0] = -45 + 175 * ((double)rawTemperature / 65536); // Convert raw temperature to actual temperature
+            SHT35.data.sht35_val[1] = 100 * ((double)rawHumidity / 65536);          // Convert raw humidity to actual humidity
+            xQueueSend(sensorQueue, &SHT35, portMAX_DELAY);
         }
         else
         {
             ESP_LOGW(SHT35_TAG, "%s: No ack, sensor not connected...skip...", esp_err_to_name(ret)); // Print warning message if no acknowledgement is received
         }
-        // xSemaphoreGive(print_mux);
-        //vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS); // Delay between different test items
-        //---------------------------------------------------
+        vTaskDelay((DELAY_ITEMS_MS / portTICK_PERIOD_MS));
     }
-    // vSemaphoreDelete(print_mux);
     vTaskDelete(NULL);
 }
 /*************************************************SHT35**********************************************************/
-
-/*************************************************MCP4725**********************************************************/
-// Function to write a DAC value to the MCP4725
-static esp_err_t i2c_master_mcp4725_write(i2c_port_t i2c_num, uint16_t dac_value)
-{
-    int ret;
-    i2c_cmd_handle_t cmd = i2c_cmd_link_create();                                     // Create an I2C command handle
-    i2c_master_start(cmd);                                                            // Start signal                                                           // Start signal
-    i2c_master_write_byte(cmd, (MCP4725_SENSOR_ADDR << 1) | WRITE_BIT, ACK_CHECK_EN); // Write slave address + write bit and enable ACK checking
-    i2c_master_write_byte(cmd, MCP4725_CMD_WRITE, ACK_CHECK_EN);                      // Write the write command
-    i2c_master_write_byte(cmd, dac_value >> 4, ACK_CHECK_EN);                         // Write the high byte of the DAC value
-    i2c_master_write_byte(cmd, dac_value << 4, ACK_CHECK_EN);                         // Write the low byte of the DAC value
-    i2c_master_stop(cmd);                                                             // Stop signal
-    ret = i2c_master_cmd_begin(i2c_num, cmd, 1000 / portTICK_PERIOD_MS);              // Execute the I2C command
-    i2c_cmd_link_delete(cmd);                                                         // Delete the I2C command handle
-    return ret;
-}
-static void i2c_MCP4725_task(void *arg)
-{
-    int ret;
-    // int task_idx = (int)arg;
-    double angle = 0.0;
-    while (1)
-    {
-        // Calculate the value of the sine wave
-        double sin_val = (sin(angle) + 1.0) / 2.0;                // Shift range from -1~1 to 0~1
-        uint16_t dac_value = (uint16_t)(sin_val * DAC_MAX + 0.5); // Scale to range 0~4095
-
-        // Write the DAC value
-        ret = i2c_master_mcp4725_write(I2C_MASTER_NUM, dac_value);
-        if (ret != ESP_OK) // Check if the operation was successful
-        {
-            ESP_LOGE(MCP4725_TAG, "MCP4725 Write Failed"); // Print an error message if the operation failed
-        }
-        else
-        {
-            dac_val = dac_value;
-        }
-        // Increase the angle
-        angle += 0.01;
-        if (angle > 2 * PI)
-        {
-            angle -= 2 * PI;
-        }
-
-        vTaskDelay(10 / portTICK_PERIOD_MS);
-    }
-}
-/*************************************************MCP4725**********************************************************/
 
 /*************************************************INA3221**********************************************************/
 static esp_err_t i2c_master_read_from_reg(i2c_cmd_handle_t cmd, uint8_t device_addr, uint8_t reg_addr, uint8_t *data_h, uint8_t *data_l)
@@ -272,15 +219,15 @@ static esp_err_t i2c_master_sensor_test(i2c_port_t i2c_num, double bus_voltage[3
         {                             // If the most significant bit is set
             rawVoltage |= 0xFFFF0000; // Extend the sign bit
         }
-        shunt_voltage[i] = (rawVoltage)*0.00004; // Convert raw shunt voltage to actual voltage
-        i2c_cmd_link_delete(cmd);                // Always delete the cmd link after reading，
+        shunt_voltage[i] = (rawVoltage) * 0.00004; // Convert raw shunt voltage to actual voltage
+        i2c_cmd_link_delete(cmd);                  // Always delete the cmd link after reading，
     }
 
     return ESP_OK;
 }
 static void i2c_INA3221_task(void *arg)
 {
-    //int task_idx = (int)arg;
+
     int ret;
     double bus_voltage[3], shunt_voltage[3];
     double shunt_resistance = 100.0;
@@ -289,7 +236,6 @@ static void i2c_INA3221_task(void *arg)
     while (1)
     {
         ret = i2c_master_sensor_test(I2C_MASTER_NUM, &bus_voltage, &shunt_voltage); // Call the new function to read the INA3221's data
-        // xSemaphoreTake(print_mux, portMAX_DELAY);
         if (ret == ESP_ERR_TIMEOUT)
         {
             ESP_LOGE(INA3221_TAG, "I2C Timeout"); // Print error message if I2C timeout occurs
@@ -298,32 +244,39 @@ static void i2c_INA3221_task(void *arg)
         {
             for (int i = 0; i < 3; i++)
             {
+                // Read INA3221 data
+                SensorData INA3221;
+                INA3221.type = DATA_TYPE_INA3221;
+
                 current[i] = shunt_voltage[i] / shunt_resistance;
                 power[i] = bus_voltage[i] * current[i];
-                bus_val[i]=bus_voltage[i];
-                shunt_val[i]=shunt_voltage[i];
+                INA3221.data.ina3221.bus_val[i] = bus_voltage[i];
+                INA3221.data.ina3221.shunt_val[i] = shunt_voltage[i];
+                xQueueSend(sensorQueue, &INA3221, portMAX_DELAY);
             }
         }
         else
         {
             ESP_LOGW(INA3221_TAG, "%s: No ack, sensor not connected...skip...", esp_err_to_name(ret)); // Print warning message if no acknowledgement is received
         }
-        // xSemaphoreGive(print_mux);
-        // vTaskDelay((DELAY_TIME_BETWEEN_ITEMS_MS * (task_idx + 1)) / portTICK_PERIOD_MS); // Delay between different test items
-        //---------------------------------------------------
+        vTaskDelay((DELAY_ITEMS_MS / portTICK_PERIOD_MS));
     }
-    // vSemaphoreDelete(print_mux);
-    // vTaskDelete(NULL);
+    vTaskDelete(NULL);
 }
 /*************************************************INA3221**********************************************************/
 
-void i2c_senor_task_create(void)
+void i2c_senor_init(void)
 {
     ESP_ERROR_CHECK(i2c_master_init()); // Initialize I2C master
 
-    /*Test I2C communication in parallel. Each task independently communicates with the BH1750 light intensity sensor, reads the data and prints the results. */
-    xTaskCreate(i2c_BH1750_task, "i2c_test_task_0", 1024 * 2, (void *)0, 10, NULL);
-    xTaskCreate(i2c_SHT35_task, "i2c_test_task_1", 1024 * 2, (void *)0, 10, NULL);   // Create first I2C test task
-    // xTaskCreate(i2c_MCP4725_task, "i2c_test_task_2", 1024 * 2, (void *)0, 10, NULL); // Create first I2C test task
-    // xTaskCreate(i2c_INA3221_task, "i2c_test_task_0", 1024 * 2, (void *)0, 10, NULL); // Create first I2C test task
+    sensorQueue = xQueueCreate(10, sizeof(SensorData));
+    if (sensorQueue == NULL)
+    {
+        printf("Error creating the queue\n");
+        ESP_LOGE("i2c_senor_init", "Error creating the queue"); 
+    }
+
+    // xTaskCreate(i2c_BH1750_task, "i2c_BH1750_task", 1024 * 2, (void *)0, 10, NULL);
+    xTaskCreate(i2c_SHT35_task, "i2c_SHT35_task", 1024 * 2, (void *)0, 10, NULL);
+    xTaskCreate(i2c_INA3221_task, "i2c_INA3221_task", 1024 * 2, (void *)0, 10, NULL);
 }

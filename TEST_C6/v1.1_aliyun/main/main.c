@@ -12,35 +12,70 @@
 #include "i2c_senor.h"
 #include "user_mqtt.h"
 #include "wifi_station.h"
+#include "mytask_list.h"
+
+// 创建全局互斥锁
+SemaphoreHandle_t print_mutex = NULL;
+
+int LightLux = -1;
+float temperature = -1;
+float Humidity = -1;
+
+void i2c_consumer_task(void *pvParameter)
+{
+    SensorData received;
+    while (1)
+    {
+        xQueueReceive(sensorQueue, &received, portMAX_DELAY);
+
+        switch (received.type)
+        {
+        case DATA_TYPE_BH1750:
+            LightLux = received.data.bh1750_lux;
+            printf("LightLux=%d\n\n", LightLux);
+            break;
+        case DATA_TYPE_SHT35:
+            temperature = received.data.sht35_val[0];
+            Humidity = received.data.sht35_val[1];
+            printf("temperature=%.4lf\n", temperature);
+            printf(" Humidity=%.4lf\n", Humidity);
+            break;
+        case DATA_TYPE_INA3221:
+            for (int i = 0; i < 3; i++)
+            {
+                printf("bus_val[%d]=%.4lf\n", i, received.data.ina3221.bus_val[i]);
+                printf("shunt_val[%d]=%.4lf\n", i, received.data.ina3221.shunt_val[i]);
+            }
+            break;
+        }
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+    }
+    vTaskDelete(NULL);
+}
 
 void app_main(void)
 {
+    // 初始化互斥锁
+    print_mutex = xSemaphoreCreateMutex();
+
+    // 确保互斥锁已成功创建
+    if (print_mutex == NULL)
+    {
+        ESP_LOGE("app_main", "Failed to create mutex");
+        return;
+    }
+
     /*uart*/
-    i2c_senor_task_create();
+    i2c_senor_init();
     station_init();
-    
-    
+    vTaskDelay(3000 / portTICK_PERIOD_MS);
     while (1)
     {
-        printf("----------------------\n");
-    
-        printf("bh1760_lux=%.4f\n\n", bh1760_lux);
-        printf("sht35_val[0]=%.4lf\n", sht35_val[0]);
-        printf("sht35_val[1]=%.4lf\n\n",sht35_val[1]);
-        // printf("dac_val=%d\n\n",dac_val);
-        // for(int i=0;i<3;i++)
-        // {
-        //     printf("bus_val[%d]=%.4lf\n",i,bus_val[i]);
-        //     printf("shunt_val[%d]=%.4lf\n",i,shunt_val[i]);
-        // }
+        task_list();
+        // sprintf(mqtt_publish_data, "{\"id\": \"123\", \"version\": \"1.0\", \"sys\": {\"ack\": 1}, \"params\": {\"LightLux\": %d, \"Humidity\": %.2f, \"Temperature\": %.2f}, \"method\": \"thing.event.property.post\"}",
+        //         LightLux, Humidity, temperature);
 
-        printf("\n");
-        int LightLux = (int)bh1760_lux;
-        float temperature = sht35_val[0];
-        float Humidity = sht35_val[1];      
-        sprintf(mqtt_publish_data, "{\"id\": \"123\", \"version\": \"1.0\", \"sys\": {\"ack\": 1}, \"params\": {\"LightLux\": %d, \"Humidity\": %.2f, \"Temperature\": %.2f}, \"method\": \"thing.event.property.post\"}", 
-                                        LightLux, Humidity, temperature);
-
-        vTaskDelay(5000 / portTICK_PERIOD_MS);
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
+    vTaskDelete(NULL);
 }

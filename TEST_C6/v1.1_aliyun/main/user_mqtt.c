@@ -90,13 +90,10 @@ void user_mqtt_app_start(void)
             .address = {
                 .uri = MQTTHostUrl,
             }},
-        .credentials = {.username = Aliyun_username, 
-                        .client_id = Aliyun_client_id,
-                  .authentication = {
-                                        .password = Aliyun_password,
-                                        .use_secure_element = 1,
-                                    }
-        },
+        .credentials = {.username = Aliyun_username, .client_id = Aliyun_client_id, .authentication = {
+                                                                                        .password = Aliyun_password,
+                                                                                        .use_secure_element = 1,
+                                                                                    }},
     };
 
     send_data();
