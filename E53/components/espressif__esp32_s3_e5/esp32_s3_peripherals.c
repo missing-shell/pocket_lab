@@ -5,14 +5,13 @@
 #include "esp_log.h"
 #include "esp_check.h"
 
-
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #include "driver/spi_master.h"
 #include "driver/ledc.h"
 #include "driver/i2c.h"
-#include "driver/uart.h"   
+#include "driver/uart.h"
 #include "bsp/esp32_s3_e53.h"
 #include "bsp_err_check.h"
 #include "bsp/display.h"
@@ -20,59 +19,48 @@
 
 static const char *TAG = "S3-EYE";
 
-static bool uart_initialized= false;
+static bool uart_initialized = false;
 static bool e53_i2c_initialized = false;
-static bool e53_spi_initialized= false;
-
+static bool e53_spi_initialized = false;
+static bool e53_slave_spi_initialized = false;
 static adc_oneshot_unit_handle_t e53_adc_handle = NULL;
 
 /***********************GPIO*****************************/
 
 /*******************button*****************************/
 
-
 static const button_config_t bsp_button_config[BSP_BUTTON_NUM] = {
-    {
-        .type = BUTTON_TYPE_ADC,
-        .adc_button_config.adc_handle = &e53_adc_handle,
-        .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
-        .adc_button_config.button_index = BSP_BUTTON_MENU,
-        .adc_button_config.min = 2310, // middle is 2410mV
-        .adc_button_config.max = 2510
-    },
-    {
-        .type = BUTTON_TYPE_ADC,
-        .adc_button_config.adc_handle = &e53_adc_handle,
-        .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
-        .adc_button_config.button_index = BSP_BUTTON_PLAY,
-        .adc_button_config.min = 1880, // middle is 1980mV
-        .adc_button_config.max = 2080
-    },
-    {
-        .type = BUTTON_TYPE_ADC,
-        .adc_button_config.adc_handle = &e53_adc_handle,
-        .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
-        .adc_button_config.button_index = BSP_BUTTON_DOWN,
-        .adc_button_config.min = 720, // middle is 820mV
-        .adc_button_config.max = 920
-    },
-    {
-        .type = BUTTON_TYPE_ADC,
-        .adc_button_config.adc_handle = &e53_adc_handle,
-        .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
-        .adc_button_config.button_index = BSP_BUTTON_UP,
-        .adc_button_config.min = 280, // middle is 380mV
-        .adc_button_config.max = 480
-    }
-};
-
-
+    {.type = BUTTON_TYPE_ADC,
+     .adc_button_config.adc_handle = &e53_adc_handle,
+     .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
+     .adc_button_config.button_index = BSP_BUTTON_MENU,
+     .adc_button_config.min = 2310, // middle is 2410mV
+     .adc_button_config.max = 2510},
+    {.type = BUTTON_TYPE_ADC,
+     .adc_button_config.adc_handle = &e53_adc_handle,
+     .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
+     .adc_button_config.button_index = BSP_BUTTON_PLAY,
+     .adc_button_config.min = 1880, // middle is 1980mV
+     .adc_button_config.max = 2080},
+    {.type = BUTTON_TYPE_ADC,
+     .adc_button_config.adc_handle = &e53_adc_handle,
+     .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
+     .adc_button_config.button_index = BSP_BUTTON_DOWN,
+     .adc_button_config.min = 720, // middle is 820mV
+     .adc_button_config.max = 920},
+    {.type = BUTTON_TYPE_ADC,
+     .adc_button_config.adc_handle = &e53_adc_handle,
+     .adc_button_config.adc_channel = ADC_CHANNEL_0, // ADC1 channel 0 is GPIO1
+     .adc_button_config.button_index = BSP_BUTTON_UP,
+     .adc_button_config.min = 280, // middle is 380mV
+     .adc_button_config.max = 480}};
 
 /******************E53_ADC***********************/
-esp_err_t e53_adc_initialize(void)
+esp_err_t e53_adc_init(void)
 {
     /* ADC was initialized before */
-    if (e53_adc_handle != NULL) {
+    if (e53_adc_handle != NULL)
+    {
         return ESP_OK;
     }
 
@@ -94,7 +82,8 @@ adc_oneshot_unit_handle_t e53_adc_get_handle(void)
 esp_err_t e53_i2c_init(void)
 {
     /* I2C was initialized before */
-    if (e53_i2c_initialized) {
+    if (e53_i2c_initialized)
+    {
         return ESP_OK;
     }
 
@@ -104,8 +93,7 @@ esp_err_t e53_i2c_init(void)
         .sda_pullup_en = GPIO_PULLUP_ENABLE,
         .scl_io_num = E53_I2C_SCL,
         .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = CONFIG_BSP_I2C_CLK_SPEED_HZ
-    };
+        .master.clk_speed = CONFIG_BSP_I2C_CLK_SPEED_HZ};
     BSP_ERROR_CHECK_RETURN_ERR(i2c_param_config(E53_I2C_NUM, &i2c_conf));
     BSP_ERROR_CHECK_RETURN_ERR(i2c_driver_install(E53_I2C_NUM, i2c_conf.mode, 0, 0, 0));
 
@@ -121,12 +109,12 @@ esp_err_t e53_i2c_deinit(void)
     return ESP_OK;
 }
 
-
 /************************E53 SPI*********************************/
 esp_err_t e53_spi_init(void)
 {
     /* SPI was initialized before */
-    if (e53_spi_initialized) {
+    if (e53_spi_initialized)
+    {
         return ESP_OK;
     }
 
@@ -151,9 +139,50 @@ esp_err_t e53_spi_deinit(void)
     return ESP_OK;
 }
 
+/************************E53 Slave SPI*********************************/
+esp_err_t e53_spi_slave_init(void)
+{
+    /* SPI was initialized before */
+    if (e53_slave_spi_initialized)
+    {
+        return ESP_OK;
+    }
 
+    spi_bus_config_t buscfg = {
+        .miso_io_num = E53_SPI_MISO,
+        .mosi_io_num = E53_SPI_MOSI,
+        .sclk_io_num = E53_SPI_SCK,
+        .quadwp_io_num = -1,
+        .quadhd_io_num = -1,
+    };
 
-/*********************led**************************************/
+    spi_slave_interface_config_t slvcfg = {
+        .mode = 0,
+        .spics_io_num = E53_SPI_NSS,
+        .queue_size = 3,
+        .flags = 0,
+    };
+
+    // Enable pull-ups on SPI lines so we don't detect rogue pulses when no master is connected.
+    gpio_set_pull_mode(E53_SPI_MISO, GPIO_PULLUP_ONLY);
+    gpio_set_pull_mode(E53_SPI_MOSI, GPIO_PULLUP_ONLY);
+    gpio_set_pull_mode(E53_SPI_SCK, GPIO_PULLUP_ONLY);
+
+    // Initialize SPI slave interface
+    ESP_ERROR_CHECK(spi_slave_initialize(E53_SPI_HOST, &buscfg, &slvcfg, SPI_DMA_CH_AUTO));
+
+    e53_slave_spi_initialized = true;
+
+    return ESP_OK;
+}
+esp_err_t e53_spi_slave_deinit(void)
+{
+    ESP_ERROR_CHECK(spi_slave_free(E53_SPI_HOST));
+    e53_slave_spi_initialized = false;
+    return ESP_OK;
+}
+
+/***************************************led****************************************************************/
 
 esp_err_t bsp_leds_init(void)
 {
@@ -162,15 +191,14 @@ esp_err_t bsp_leds_init(void)
         .mode = GPIO_MODE_OUTPUT_OD, // GPIO3 is connected directly to the LED (on board revision 2.1), so we use Open-drain here
         .pull_up_en = GPIO_PULLUP_DISABLE,
         .pull_down_en = GPIO_PULLDOWN_DISABLE,
-        .intr_type = GPIO_INTR_DISABLE
-    };
+        .intr_type = GPIO_INTR_DISABLE};
     BSP_ERROR_CHECK_RETURN_ERR(gpio_config(&led_io_config));
     return ESP_OK;
 }
 
 esp_err_t bsp_led_set(const bsp_led_t led_io, const bool on)
 {
-    BSP_ERROR_CHECK_RETURN_ERR(gpio_set_level((gpio_num_t) led_io, (uint32_t) on));
+    BSP_ERROR_CHECK_RETURN_ERR(gpio_set_level((gpio_num_t)led_io, (uint32_t)on));
     return ESP_OK;
 }
 
@@ -178,36 +206,41 @@ esp_err_t bsp_iot_button_create(button_handle_t btn_array[], int *btn_cnt, int b
 {
     esp_err_t ret = ESP_OK;
     if ((btn_array_size < BSP_BUTTON_NUM) ||
-            (btn_array == NULL)) {
+        (btn_array == NULL))
+    {
         return ESP_ERR_INVALID_ARG;
     }
- 
+
     /* Initialize ADC and get ADC handle */
-    BSP_ERROR_CHECK_RETURN_NULL(e53_adc_initialize());
+    BSP_ERROR_CHECK_RETURN_NULL(e53_adc_init());
     e53_adc_handle = e53_adc_get_handle();
- 
-    if (btn_cnt) {
+
+    if (btn_cnt)
+    {
         *btn_cnt = 0;
     }
-    for (int i = 0; i < BSP_BUTTON_NUM; i++) {
+    for (int i = 0; i < BSP_BUTTON_NUM; i++)
+    {
         btn_array[i] = iot_button_create(&bsp_button_config[i]);
-        if (btn_array[i] == NULL) {
+        if (btn_array[i] == NULL)
+        {
             ret = ESP_FAIL;
             break;
         }
-        if (btn_cnt) {
+        if (btn_cnt)
+        {
             (*btn_cnt)++;
         }
     }
     return ret;
 }
 
-
 /**********************E53 UART*************************/
 esp_err_t e53_uart_init(void)
 {
     /* UART was initialized before */
-    if (uart_initialized) {
+    if (uart_initialized)
+    {
         return ESP_OK;
     }
 
@@ -236,7 +269,6 @@ esp_err_t e53_uart_deinit(void)
     uart_initialized = false;
     return ESP_OK;
 }
-
 
 /***********************uart_emnu***********************/
 typedef struct

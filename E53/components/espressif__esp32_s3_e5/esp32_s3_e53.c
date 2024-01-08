@@ -17,11 +17,11 @@
 static const char *TAG = "S3-E53";
 static bool i2c_initialized = false;
 
-
 esp_err_t bsp_i2c_init(void)
 {
     /* I2C was initialized before */
-    if (i2c_initialized) {
+    if (i2c_initialized)
+    {
         return ESP_OK;
     }
 
@@ -31,8 +31,7 @@ esp_err_t bsp_i2c_init(void)
         .sda_pullup_en = GPIO_PULLUP_ENABLE,
         .scl_io_num = BSP_I2C_SCL,
         .scl_pullup_en = GPIO_PULLUP_ENABLE,
-        .master.clk_speed = CONFIG_BSP_I2C_CLK_SPEED_HZ
-    };
+        .master.clk_speed = CONFIG_BSP_I2C_CLK_SPEED_HZ};
     BSP_ERROR_CHECK_RETURN_ERR(i2c_param_config(BSP_I2C_NUM, &i2c_conf));
     BSP_ERROR_CHECK_RETURN_ERR(i2c_driver_install(BSP_I2C_NUM, i2c_conf.mode, 0, 0, 0));
 
@@ -48,11 +47,11 @@ esp_err_t bsp_i2c_deinit(void)
     return ESP_OK;
 }
 
-#define LCD_CMD_BITS         (8)
-#define LCD_PARAM_BITS       (8)
-#define LCD_LEDC_CH          (CONFIG_BSP_DISPLAY_BRIGHTNESS_LEDC_CH)
-#define LVGL_TICK_PERIOD_MS  (CONFIG_BSP_DISPLAY_LVGL_TICK)
-#define LVGL_MAX_SLEEP_MS    (CONFIG_BSP_DISPLAY_LVGL_MAX_SLEEP)
+#define LCD_CMD_BITS (8)
+#define LCD_PARAM_BITS (8)
+#define LCD_LEDC_CH (CONFIG_BSP_DISPLAY_BRIGHTNESS_LEDC_CH)
+#define LVGL_TICK_PERIOD_MS (CONFIG_BSP_DISPLAY_LVGL_TICK)
+#define LVGL_MAX_SLEEP_MS (CONFIG_BSP_DISPLAY_LVGL_MAX_SLEEP)
 
 static esp_err_t bsp_display_brightness_init(void)
 {
@@ -65,15 +64,13 @@ static esp_err_t bsp_display_brightness_init(void)
         .timer_sel = 1,
         .duty = 0,
         .hpoint = 0,
-        .flags.output_invert = true
-    };
+        .flags.output_invert = true};
     const ledc_timer_config_t LCD_backlight_timer = {
         .speed_mode = LEDC_LOW_SPEED_MODE,
         .duty_resolution = LEDC_TIMER_10_BIT,
         .timer_num = 1,
         .freq_hz = 5000,
-        .clk_cfg = LEDC_AUTO_CLK
-    };
+        .clk_cfg = LEDC_AUTO_CLK};
 
     BSP_ERROR_CHECK_RETURN_ERR(ledc_timer_config(&LCD_backlight_timer));
     BSP_ERROR_CHECK_RETURN_ERR(ledc_channel_config(&LCD_backlight_channel));
@@ -83,9 +80,12 @@ static esp_err_t bsp_display_brightness_init(void)
 
 esp_err_t bsp_display_brightness_set(int brightness_percent)
 {
-    if (brightness_percent > 100) {
+    if (brightness_percent > 100)
+    {
         brightness_percent = 100;
-    } else if (brightness_percent < 0) {
+    }
+    else if (brightness_percent < 0)
+    {
         brightness_percent = 0;
     }
 
@@ -146,17 +146,18 @@ esp_err_t bsp_display_new(const bsp_display_config_t *config, esp_lcd_panel_hand
     };
     ESP_GOTO_ON_ERROR(esp_lcd_new_panel_st7789(*ret_io, &panel_config, ret_panel), err, TAG, "New panel failed");
 
-
     esp_lcd_panel_reset(*ret_panel);
     esp_lcd_panel_init(*ret_panel);
     esp_lcd_panel_invert_color(*ret_panel, true);
     return ret;
 
 err:
-    if (*ret_panel) {
+    if (*ret_panel)
+    {
         esp_lcd_panel_del(*ret_panel);
     }
-    if (*ret_io) {
+    if (*ret_io)
+    {
         esp_lcd_panel_io_del(*ret_io);
     }
     spi_bus_free(BSP_LCD_SPI_NUM);
@@ -196,8 +197,7 @@ static lv_disp_t *bsp_display_lcd_init(void)
         },
         .flags = {
             .buff_dma = true,
-        }
-    };
+        }};
 
     return lvgl_port_add_disp(&disp_cfg);
 }
@@ -211,8 +211,7 @@ lv_disp_t *bsp_display_start(void)
             .task_affinity = 1,
             .timer_period_ms = LVGL_TICK_PERIOD_MS,
             .task_max_sleep_ms = LVGL_MAX_SLEEP_MS,
-        }
-    };
+        }};
     return bsp_display_start_with_config(&cfg);
 }
 
