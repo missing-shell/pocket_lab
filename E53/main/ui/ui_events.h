@@ -7,28 +7,35 @@
 #define _UI_EVENTS_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-void backlight(lv_event_t * e);
-void volumesetting(lv_event_t * e);
-void gpioTest(lv_event_t * e);
-void isrTestCb_0(lv_event_t * e);
-void isrTestCb_1(lv_event_t * e);
-void isrTestCb_2(lv_event_t * e);
-void timeTestCb(lv_event_t * e);
-void adTestCb(lv_event_t * e);
-void pwmTestCb(lv_event_t * e);
-void daTestCb(lv_event_t * e);
-void uartTestCb(lv_event_t * e);
-void i2cTestCb(lv_event_t * e);
-void spiTestCb(lv_event_t * e);
-void mqttTestCb(lv_event_t * e);
-void wifiscanf(lv_event_t * e);
-void wifistart(lv_event_t * e);
-void wificlose(lv_event_t * e);
-void wifisanf(lv_event_t * e);
-void connectwifi(lv_event_t * e);
+    void gpio_test_initcb(lv_event_t *e);
+    void isr_test_initcb(lv_event_t *e);
+    void pwm_test_initcb(lv_event_t *e);
+    void uart_test_initcb(lv_event_t *e);
+    void i2c_test_initcb(lv_event_t *e);
+    void spi_test_initcb(lv_event_t *e);
+    void backlight(lv_event_t *e);
+    void volumesetting(lv_event_t *e);
+    void isrTestCb_1(lv_event_t *e);
+    void isrTestCb_2(lv_event_t *e);
+    void timeTestCb(lv_event_t *e);
+    void pwmTestCb(lv_event_t *e);
+    void clean_uartuicb(lv_event_t *e);
+    void uartKeyBoardTxCb(lv_event_t *e);
+    void clean_i2cuicb(lv_event_t *e);
+    void i2cKeyBoardTxCb(lv_event_t *e);
+    void clean_spiuicb(lv_event_t *e);
+    void spiKeyBoardTxCb(lv_event_t *e);
+    void spi_maste_initcb(lv_event_t *e);
+    void spi_slave_initcb(lv_event_t *e);
+    void wifiscanf(lv_event_t *e);
+    void wifistart(lv_event_t *e);
+    void wificlose(lv_event_t *e);
+    void wifisanf(lv_event_t *e);
+    void connectwifi(lv_event_t *e);
 
 #ifdef __cplusplus
 } /*extern "C"*/

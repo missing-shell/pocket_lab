@@ -1,7 +1,16 @@
 SET(SOURCES screens/ui_home.c
+    screens/ui_gpioui.c
+    screens/ui_isrui.c
+    screens/ui_timeui.c
+    screens/ui_adui.c
+    screens/ui_pwmui.c
+    screens/ui_daui.c
+    screens/ui_uartui.c
+    screens/ui_i2cui.c
+    screens/ui_spiui.c
     screens/ui_setting.c
-    screens/ui_wifiset.c
     screens/ui_datetimeui.c
+    screens/ui_wifiset.c
     ui.c
     components/ui_comp_hook.c
     ui_helpers.c

@@ -7,264 +7,295 @@
 #define _TIMERGUI_UI_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-    #include "lvgl.h"
-#include "math.h"
+#include "lvgl.h"
+#include "lab.h"
 #include "ui_helpers.h"
 #include "ui_events.h"
-void moveleft_Animation( lv_obj_t *TargetObject, int delay);
-void moveright_Animation( lv_obj_t *TargetObject, int delay);
-void moveup_Animation( lv_obj_t *TargetObject, int delay);
-void movedown_Animation( lv_obj_t *TargetObject, int delay);
-// SCREEN: ui_home
-void ui_home_screen_init(void);
-extern lv_obj_t *ui_home;
-void ui_event_header( lv_event_t * e);
-extern lv_obj_t *ui_header;
-extern lv_obj_t *ui_mobile;
-extern lv_obj_t *ui_time;
-extern lv_obj_t *ui_wifi;
-extern lv_obj_t *ui_body;
-extern lv_obj_t *ui_home1;
-void ui_event_gpiobtn( lv_event_t * e);
-extern lv_obj_t *ui_gpiobtn;
-extern lv_obj_t *ui_gpiolabel;
-void ui_event_isrbtn( lv_event_t * e);
-extern lv_obj_t *ui_isrbtn;
-extern lv_obj_t *ui_isrlabel;
-void ui_event_timebtn( lv_event_t * e);
-extern lv_obj_t *ui_timebtn;
-extern lv_obj_t *ui_timelabel;
-void ui_event_adbtn( lv_event_t * e);
-extern lv_obj_t *ui_adbtn;
-extern lv_obj_t *ui_adlabel;
-void ui_event_pwmbtn( lv_event_t * e);
-extern lv_obj_t *ui_pwmbtn;
-extern lv_obj_t *ui_pwmlabel;
-void ui_event_dabtn( lv_event_t * e);
-extern lv_obj_t *ui_dabtn;
-extern lv_obj_t *ui_dalabel;
-extern lv_obj_t *ui_home2;
-void ui_event_uartbtn( lv_event_t * e);
-extern lv_obj_t *ui_uartbtn;
-extern lv_obj_t *ui_uartlabel;
-void ui_event_i2cbtn( lv_event_t * e);
-extern lv_obj_t *ui_i2cbtn;
-extern lv_obj_t *ui_i2clabel;
-void ui_event_spibtn( lv_event_t * e);
-extern lv_obj_t *ui_spibtn;
-extern lv_obj_t *ui_spilabel;
-void ui_event_mqttbtn( lv_event_t * e);
-extern lv_obj_t *ui_mqttbtn;
-extern lv_obj_t *ui_mqttlabel;
-void ui_event_menudown( lv_event_t * e);
-extern lv_obj_t *ui_menudown;
-extern lv_obj_t *ui_menudowntop;
-void ui_event_wifibtn( lv_event_t * e);
-extern lv_obj_t *ui_wifibtn;
-extern lv_obj_t *ui_wifilabel;
-void ui_event_bluebtn( lv_event_t * e);
-extern lv_obj_t *ui_bluebtn;
-extern lv_obj_t *ui_bluelabel;
-void ui_event_gpsbtn( lv_event_t * e);
-extern lv_obj_t *ui_gpsbtn;
-extern lv_obj_t *ui_mutelabel1;
-void ui_event_settinglbtn( lv_event_t * e);
-extern lv_obj_t *ui_settinglbtn;
-extern lv_obj_t *ui_settinglabel;
-void ui_event_lightslider( lv_event_t * e);
-extern lv_obj_t *ui_lightslider;
-extern lv_obj_t *ui_lighttext;
-void ui_event_volumeslider( lv_event_t * e);
-extern lv_obj_t *ui_volumeslider;
-extern lv_obj_t *ui_volumetext;
-extern lv_obj_t *ui_menudownfoot;
-void ui_event_gpiolayer( lv_event_t * e);
-extern lv_obj_t *ui_gpiolayer;
-extern lv_obj_t *ui_gpioheader;
-extern lv_obj_t *ui_wlantitle2;
-extern lv_obj_t *ui_gpiopanel;
-void ui_event_led( lv_event_t * e);
-extern lv_obj_t *ui_led;
-void ui_event_isrlayer( lv_event_t * e);
-extern lv_obj_t *ui_isrlayer;
-extern lv_obj_t *ui_isrheader;
-extern lv_obj_t *ui_isrtitle;
-extern lv_obj_t *ui_isrpanel;
-void ui_event_isrbtn0( lv_event_t * e);
-extern lv_obj_t *ui_isrbtn0;
-extern lv_obj_t *ui_isrlabel0;
-void ui_event_isrbtn1( lv_event_t * e);
-extern lv_obj_t *ui_isrbtn1;
-extern lv_obj_t *ui_isrlabel1;
-void ui_event_isrbtn2( lv_event_t * e);
-extern lv_obj_t *ui_isrbtn2;
-extern lv_obj_t *ui_isrlabel2;
-void ui_event_timelayer( lv_event_t * e);
-extern lv_obj_t *ui_timelayer;
-extern lv_obj_t *ui_timerheader;
-extern lv_obj_t *ui_timertitel;
-extern lv_obj_t *ui_timerpanel;
-void ui_event_timeBox( lv_event_t * e);
-extern lv_obj_t *ui_timeBox;
-void ui_event_adlayer( lv_event_t * e);
-extern lv_obj_t *ui_adlayer;
-extern lv_obj_t *ui_adheader;
-extern lv_obj_t *ui_adtitle;
-extern lv_obj_t *ui_adpanel;
-void ui_event_adArc( lv_event_t * e);
-extern lv_obj_t *ui_adArc;
-void ui_event_pwmlayer( lv_event_t * e);
-extern lv_obj_t *ui_pwmlayer;
-extern lv_obj_t *ui_pwmheader;
-extern lv_obj_t *ui_pwmtitle;
-extern lv_obj_t *ui_pwmpanel;
-void ui_event_pwm( lv_event_t * e);
-extern lv_obj_t *ui_pwm;
-void ui_event_dalayer( lv_event_t * e);
-extern lv_obj_t *ui_dalayer;
-extern lv_obj_t *ui_daheeader;
-extern lv_obj_t *ui_datitle;
-extern lv_obj_t *ui_dapanel;
-void ui_event_dachart( lv_event_t * e);
-extern lv_obj_t *ui_dachart;
-void ui_event_uartlayer( lv_event_t * e);
-extern lv_obj_t *ui_uartlayer;
-extern lv_obj_t *ui_uartheader;
-extern lv_obj_t *ui_uarttitle;
-extern lv_obj_t *ui_uartpanel;
-void ui_event_uart( lv_event_t * e);
-extern lv_obj_t *ui_uart;
-void ui_event_i2clayer( lv_event_t * e);
-extern lv_obj_t *ui_i2clayer;
-extern lv_obj_t *ui_i2cheader;
-extern lv_obj_t *ui_i2ctitle;
-extern lv_obj_t *ui_i2cpanel;
-void ui_event_i2c( lv_event_t * e);
-extern lv_obj_t *ui_i2c;
-void ui_event_spilayer( lv_event_t * e);
-extern lv_obj_t *ui_spilayer;
-extern lv_obj_t *ui_spiheader;
-extern lv_obj_t *ui_spititle;
-extern lv_obj_t *ui_spipanel;
-void ui_event_spi( lv_event_t * e);
-extern lv_obj_t *ui_spi;
-void ui_event_mqttlayer( lv_event_t * e);
-extern lv_obj_t *ui_mqttlayer;
-extern lv_obj_t *ui_mqttheader;
-extern lv_obj_t *ui_mqtttitle;
-extern lv_obj_t *ui_mqttpanel;
-void ui_event_mqtt( lv_event_t * e);
-extern lv_obj_t *ui_mqtt;
-// SCREEN: ui_setting
-void ui_setting_screen_init(void);
-void ui_event_setting( lv_event_t * e);
-extern lv_obj_t *ui_setting;
-extern lv_obj_t *ui_settingheader;
-extern lv_obj_t *ui_settingtext;
-extern lv_obj_t *ui_setpannel;
-extern lv_obj_t *ui_aboutpannel;
-extern lv_obj_t *ui_aboutlabel;
-extern lv_obj_t *ui_aboutlabel2;
-void ui_event_wifipanel( lv_event_t * e);
-extern lv_obj_t *ui_wifipanel;
-extern lv_obj_t *ui_wifitext;
-extern lv_obj_t *ui_wifionlabel1;
-void ui_event_aboutpannel1( lv_event_t * e);
-extern lv_obj_t *ui_aboutpannel1;
-extern lv_obj_t *ui_aboutlabel19;
-extern lv_obj_t *ui_aboutlabel21;
-// SCREEN: ui_wifiset
-void ui_wifiset_screen_init(void);
-void ui_event_wifiset( lv_event_t * e);
-extern lv_obj_t *ui_wifiset;
-extern lv_obj_t *ui_wlanheader;
-void ui_event_headerbackico( lv_event_t * e);
-extern lv_obj_t *ui_headerbackico;
-extern lv_obj_t *ui_wlantitle;
-extern lv_obj_t *ui_wlansetpannel;
-extern lv_obj_t *ui_wlanswitchpanel;
-extern lv_obj_t *ui_wlansetlabel;
-void ui_event_wlanswitch( lv_event_t * e);
-extern lv_obj_t *ui_wlanswitch;
-extern lv_obj_t *ui_wificonnect;
-extern lv_obj_t *ui_wifisymbol;
-extern lv_obj_t *ui_wifiname;
-extern lv_obj_t *ui_wifistats;
-extern lv_obj_t *ui_wificlock;
-extern lv_obj_t *ui_wificonright;
-extern lv_obj_t *ui_wifiscan;
-extern lv_obj_t *ui_wifiselecttitle;
-void ui_event_wifirefresh( lv_event_t * e);
-extern lv_obj_t *ui_wifirefresh;
-extern lv_obj_t *ui_wifilist;
-extern lv_obj_t *ui_wifisymbol1;
-void ui_event_wifilistname( lv_event_t * e);
-extern lv_obj_t *ui_wifilistname;
-extern lv_obj_t *ui_wifilock;
-extern lv_obj_t *ui_wifilistright;
-extern lv_obj_t *ui_enterwifipass;
-extern lv_obj_t *ui_passpannel;
-extern lv_obj_t *ui_wifinamelabel;
-void ui_event_wifipassinput( lv_event_t * e);
-extern lv_obj_t *ui_wifipassinput;
-void ui_event_connectbtn( lv_event_t * e);
-extern lv_obj_t *ui_connectbtn;
-extern lv_obj_t *ui_connecttext;
-void ui_event_canceltbtn( lv_event_t * e);
-extern lv_obj_t *ui_canceltbtn;
-extern lv_obj_t *ui_canceltext;
-extern lv_obj_t *ui_keypannel;
-extern lv_obj_t *ui_Keyboard;
-// SCREEN: ui_datetimeui
-void ui_datetimeui_screen_init(void);
-void ui_event_datetimeui( lv_event_t * e);
-extern lv_obj_t *ui_datetimeui;
-extern lv_obj_t *ui_datetimeheader;
-extern lv_obj_t *ui_datetimetitle;
-extern lv_obj_t *ui_datetimebody;
-extern lv_obj_t *ui_datetimepanel;
-extern lv_obj_t *ui_autodatetimelabel1;
-extern lv_obj_t *ui_autodatetimeswitch1;
-extern lv_obj_t *ui_datetimepanel1;
-extern lv_obj_t *ui_autodatetimelabel;
-void ui_event_autodatetimeswitch( lv_event_t * e);
-extern lv_obj_t *ui_autodatetimeswitch;
-void ui_event_setdate( lv_event_t * e);
-extern lv_obj_t *ui_setdate;
-extern lv_obj_t *ui_date;
-extern lv_obj_t *ui_dateright;
-extern lv_obj_t *ui_settime;
-extern lv_obj_t *ui_time1;
-extern lv_obj_t *ui_timeright;
-extern lv_obj_t *ui_datetimecountry;
-extern lv_obj_t *ui_datetimecountrylabel;
-extern lv_obj_t *ui_datetimelabel1;
-void ui_event_calendar( lv_event_t * e);
-extern lv_obj_t *ui_calendar;
-extern lv_obj_t *ui____initial_actions0;
+    void moveleft_Animation(lv_obj_t *TargetObject, int delay);
+    void moveright_Animation(lv_obj_t *TargetObject, int delay);
+    void moveup_Animation(lv_obj_t *TargetObject, int delay);
+    void movedown_Animation(lv_obj_t *TargetObject, int delay);
+    // SCREEN: ui_home
+    void ui_home_screen_init(void);
+    extern lv_obj_t *ui_home;
+    void ui_event_header(lv_event_t *e);
+    extern lv_obj_t *ui_header;
+    extern lv_obj_t *ui_mobile;
+    extern lv_obj_t *ui_time;
+    extern lv_obj_t *ui_wifi;
+    extern lv_obj_t *ui_body;
+    extern lv_obj_t *ui_home1;
+    void ui_event_gpiobtn(lv_event_t *e);
+    extern lv_obj_t *ui_gpiobtn;
+    extern lv_obj_t *ui_gpiolabel;
+    void ui_event_isrbtn(lv_event_t *e);
+    extern lv_obj_t *ui_isrbtn;
+    extern lv_obj_t *ui_isrlabel;
+    void ui_event_timebtn(lv_event_t *e);
+    extern lv_obj_t *ui_timebtn;
+    extern lv_obj_t *ui_timelabel;
+    void ui_event_adbtn(lv_event_t *e);
+    extern lv_obj_t *ui_adbtn;
+    extern lv_obj_t *ui_adlabel;
+    void ui_event_pwmbtn(lv_event_t *e);
+    extern lv_obj_t *ui_pwmbtn;
+    extern lv_obj_t *ui_pwmlabel;
+    void ui_event_dabtn(lv_event_t *e);
+    extern lv_obj_t *ui_dabtn;
+    extern lv_obj_t *ui_dalabel;
+    extern lv_obj_t *ui_home2;
+    void ui_event_uartbtn(lv_event_t *e);
+    extern lv_obj_t *ui_uartbtn;
+    extern lv_obj_t *ui_uartlabel;
+    void ui_event_i2cbtn(lv_event_t *e);
+    extern lv_obj_t *ui_i2cbtn;
+    extern lv_obj_t *ui_i2clabel;
+    void ui_event_spibtn(lv_event_t *e);
+    extern lv_obj_t *ui_spibtn;
+    extern lv_obj_t *ui_spilabel;
+    extern lv_obj_t *ui_mqttbtn;
+    extern lv_obj_t *ui_mqttlabel;
+    void ui_event_menudown(lv_event_t *e);
+    extern lv_obj_t *ui_menudown;
+    extern lv_obj_t *ui_menudowntop;
+    void ui_event_wifibtn(lv_event_t *e);
+    extern lv_obj_t *ui_wifibtn;
+    extern lv_obj_t *ui_wifilabel;
+    void ui_event_bluebtn(lv_event_t *e);
+    extern lv_obj_t *ui_bluebtn;
+    extern lv_obj_t *ui_bluelabel;
+    void ui_event_gpsbtn(lv_event_t *e);
+    extern lv_obj_t *ui_gpsbtn;
+    extern lv_obj_t *ui_mutelabel1;
+    void ui_event_settinglbtn(lv_event_t *e);
+    extern lv_obj_t *ui_settinglbtn;
+    extern lv_obj_t *ui_settinglabel;
+    void ui_event_lightslider(lv_event_t *e);
+    extern lv_obj_t *ui_lightslider;
+    extern lv_obj_t *ui_lighttext;
+    void ui_event_volumeslider(lv_event_t *e);
+    extern lv_obj_t *ui_volumeslider;
+    extern lv_obj_t *ui_volumetext;
+    extern lv_obj_t *ui_menudownfoot;
+    // SCREEN: ui_gpioui
+    void ui_gpioui_screen_init(void);
+    void ui_event_gpioui(lv_event_t *e);
+    extern lv_obj_t *ui_gpioui;
+    extern lv_obj_t *ui_gpioheader;
+    extern lv_obj_t *ui_gpiotitle;
+    extern lv_obj_t *ui_gpiopanel;
+    // SCREEN: ui_isrui
+    void ui_isrui_screen_init(void);
+    void ui_event_isrui(lv_event_t *e);
+    extern lv_obj_t *ui_isrui;
+    extern lv_obj_t *ui_isrheader;
+    extern lv_obj_t *ui_isrtitle;
+    extern lv_obj_t *ui_isrpanel;
+    void ui_event_isrbtn1(lv_event_t *e);
+    extern lv_obj_t *ui_isrbtn1;
+    extern lv_obj_t *ui_isrlabel1;
+    void ui_event_isrbtn2(lv_event_t *e);
+    extern lv_obj_t *ui_isrbtn2;
+    extern lv_obj_t *ui_isrlabel2;
+    // SCREEN: ui_timeui
+    void ui_timeui_screen_init(void);
+    void ui_event_timeui(lv_event_t *e);
+    extern lv_obj_t *ui_timeui;
+    extern lv_obj_t *ui_timerheader;
+    extern lv_obj_t *ui_timertitle;
+    extern lv_obj_t *ui_timerpanel;
+    void ui_event_timerSpinbox(lv_event_t *e);
+    extern lv_obj_t *ui_timerSpinbox;
+    // SCREEN: ui_adui
+    void ui_adui_screen_init(void);
+    void ui_event_adui(lv_event_t *e);
+    extern lv_obj_t *ui_adui;
+    extern lv_obj_t *ui_adheader;
+    extern lv_obj_t *ui_adtitle;
+    extern lv_obj_t *ui_adpanel;
+    extern lv_obj_t *ui_adchart;
+    // SCREEN: ui_pwmui
+    void ui_pwmui_screen_init(void);
+    void ui_event_pwmui(lv_event_t *e);
+    extern lv_obj_t *ui_pwmui;
+    extern lv_obj_t *ui_pwmheader;
+    extern lv_obj_t *ui_pwmtitle;
+    extern lv_obj_t *ui_pwmpanel;
+    void ui_event_pwmchart(lv_event_t *e);
+    extern lv_obj_t *ui_pwmchart;
+    // SCREEN: ui_daui
+    void ui_daui_screen_init(void);
+    void ui_event_daui(lv_event_t *e);
+    extern lv_obj_t *ui_daui;
+    extern lv_obj_t *ui_daheader;
+    extern lv_obj_t *ui_datitle;
+    extern lv_obj_t *ui_dapanel;
+    // SCREEN: ui_uartui
+    void ui_uartui_screen_init(void);
+    void ui_event_uartui(lv_event_t *e);
+    extern lv_obj_t *ui_uartui;
+    extern lv_obj_t *ui_uartheader;
+    extern lv_obj_t *ui_uarttitle;
+    extern lv_obj_t *ui_TXpanel;
+    extern lv_obj_t *ui_txlabel;
+    void ui_event_txtext(lv_event_t *e);
+    extern lv_obj_t *ui_txtext;
+    extern lv_obj_t *ui_RXpanel;
+    extern lv_obj_t *ui_rxlabel;
+    void ui_event_rxtext(lv_event_t *e);
+    extern lv_obj_t *ui_rxtext;
+    void ui_event_uartkeyboard(lv_event_t *e);
+    extern lv_obj_t *ui_uartkeyboard;
+    // SCREEN: ui_i2cui
+    void ui_i2cui_screen_init(void);
+    void ui_event_i2cui(lv_event_t *e);
+    extern lv_obj_t *ui_i2cui;
+    extern lv_obj_t *ui_i2cheader;
+    extern lv_obj_t *ui_i2ctitle;
+    extern lv_obj_t *ui_i2cmasterpanel;
+    extern lv_obj_t *ui_i2cmasterlabel;
+    void ui_event_i2cmastertext(lv_event_t *e);
+    extern lv_obj_t *ui_i2cmastertext;
+    extern lv_obj_t *ui_i2csenorpanel;
+    extern lv_obj_t *ui_i2csenolabel;
+    void ui_event_i2csenortext(lv_event_t *e);
+    extern lv_obj_t *ui_i2csenortext;
+    void ui_event_i2ckeyboard(lv_event_t *e);
+    extern lv_obj_t *ui_i2ckeyboard;
+    // SCREEN: ui_spiui
+    void ui_spiui_screen_init(void);
+    void ui_event_spiui(lv_event_t *e);
+    extern lv_obj_t *ui_spiui;
+    extern lv_obj_t *ui_spiheader;
+    extern lv_obj_t *ui_spititle;
+    extern lv_obj_t *ui_spitxpanel;
+    extern lv_obj_t *ui_spitxlabel;
+    void ui_event_spitxtext(lv_event_t *e);
+    extern lv_obj_t *ui_spitxtext;
+    extern lv_obj_t *ui_spirxpanel;
+    extern lv_obj_t *ui_spirxlabel;
+    void ui_event_spirxtext(lv_event_t *e);
+    extern lv_obj_t *ui_spirxtext;
+    void ui_event_spikeyboard(lv_event_t *e);
+    extern lv_obj_t *ui_spikeyboard;
+    extern lv_obj_t *ui_spipanel;
+    void ui_event_spimastebtn(lv_event_t *e);
+    extern lv_obj_t *ui_spimastebtn;
+    extern lv_obj_t *ui_spimasterbtnlabel;
+    void ui_event_spislavebtn(lv_event_t *e);
+    extern lv_obj_t *ui_spislavebtn;
+    extern lv_obj_t *ui_spislavebtnlabel;
+    // SCREEN: ui_setting
+    void ui_setting_screen_init(void);
+    void ui_event_setting(lv_event_t *e);
+    extern lv_obj_t *ui_setting;
+    extern lv_obj_t *ui_settingheader;
+    extern lv_obj_t *ui_settingtext;
+    extern lv_obj_t *ui_setpannel;
+    extern lv_obj_t *ui_aboutpannel;
+    extern lv_obj_t *ui_aboutlabel;
+    extern lv_obj_t *ui_aboutlabel2;
+    void ui_event_wifipanel(lv_event_t *e);
+    extern lv_obj_t *ui_wifipanel;
+    extern lv_obj_t *ui_wifitext;
+    extern lv_obj_t *ui_wifionlabel1;
+    void ui_event_aboutpannel1(lv_event_t *e);
+    extern lv_obj_t *ui_aboutpannel1;
+    extern lv_obj_t *ui_aboutlabel19;
+    extern lv_obj_t *ui_aboutlabel21;
+    // SCREEN: ui_datetimeui
+    void ui_datetimeui_screen_init(void);
+    void ui_event_datetimeui(lv_event_t *e);
+    extern lv_obj_t *ui_datetimeui;
+    extern lv_obj_t *ui_datetimeheader;
+    extern lv_obj_t *ui_datetimetitle;
+    extern lv_obj_t *ui_datetimebody;
+    extern lv_obj_t *ui_datetimepanel;
+    extern lv_obj_t *ui_autodatetimelabel1;
+    extern lv_obj_t *ui_autodatetimeswitch1;
+    extern lv_obj_t *ui_datetimepanel1;
+    extern lv_obj_t *ui_autodatetimelabel;
+    void ui_event_autodatetimeswitch(lv_event_t *e);
+    extern lv_obj_t *ui_autodatetimeswitch;
+    void ui_event_setdate(lv_event_t *e);
+    extern lv_obj_t *ui_setdate;
+    extern lv_obj_t *ui_date;
+    extern lv_obj_t *ui_dateright;
+    extern lv_obj_t *ui_settime;
+    extern lv_obj_t *ui_time1;
+    extern lv_obj_t *ui_timeright;
+    extern lv_obj_t *ui_datetimecountry;
+    extern lv_obj_t *ui_datetimecountrylabel;
+    extern lv_obj_t *ui_datetimelabel1;
+    void ui_event_calendar(lv_event_t *e);
+    extern lv_obj_t *ui_calendar;
+    // SCREEN: ui_wifiset
+    void ui_wifiset_screen_init(void);
+    void ui_event_wifiset(lv_event_t *e);
+    extern lv_obj_t *ui_wifiset;
+    extern lv_obj_t *ui_wlanheader;
+    void ui_event_headerbackico(lv_event_t *e);
+    extern lv_obj_t *ui_headerbackico;
+    extern lv_obj_t *ui_wlantitle;
+    extern lv_obj_t *ui_wlansetpannel;
+    extern lv_obj_t *ui_wlanswitchpanel;
+    extern lv_obj_t *ui_wlansetlabel;
+    void ui_event_wlanswitch(lv_event_t *e);
+    extern lv_obj_t *ui_wlanswitch;
+    extern lv_obj_t *ui_wificonnect;
+    extern lv_obj_t *ui_wifisymbol;
+    extern lv_obj_t *ui_wifiname;
+    extern lv_obj_t *ui_wifistats;
+    extern lv_obj_t *ui_wificlock;
+    extern lv_obj_t *ui_wificonright;
+    extern lv_obj_t *ui_wifiscan;
+    extern lv_obj_t *ui_wifiselecttitle;
+    void ui_event_wifirefresh(lv_event_t *e);
+    extern lv_obj_t *ui_wifirefresh;
+    extern lv_obj_t *ui_wifilist;
+    extern lv_obj_t *ui_wifisymbol1;
+    void ui_event_wifilistname(lv_event_t *e);
+    extern lv_obj_t *ui_wifilistname;
+    extern lv_obj_t *ui_wifilock;
+    extern lv_obj_t *ui_wifilistright;
+    extern lv_obj_t *ui_enterwifipass;
+    extern lv_obj_t *ui_passpannel;
+    extern lv_obj_t *ui_wifinamelabel;
+    void ui_event_wifipassinput(lv_event_t *e);
+    extern lv_obj_t *ui_wifipassinput;
+    void ui_event_connectbtn(lv_event_t *e);
+    extern lv_obj_t *ui_connectbtn;
+    extern lv_obj_t *ui_connecttext;
+    void ui_event_canceltbtn(lv_event_t *e);
+    extern lv_obj_t *ui_canceltbtn;
+    extern lv_obj_t *ui_canceltext;
+    extern lv_obj_t *ui_keypannel;
+    extern lv_obj_t *ui_Keyboard;
+    extern lv_obj_t *ui____initial_actions0;
 
-LV_IMG_DECLARE( ui_img_astronaut1_png);   // assets\astronaut1.png
-LV_IMG_DECLARE( ui_img_astronaut10_png);   // assets\astronaut10.png
-LV_IMG_DECLARE( ui_img_astronaut11_png);   // assets\astronaut11.png
-LV_IMG_DECLARE( ui_img_astronaut12_png);   // assets\astronaut12.png
-LV_IMG_DECLARE( ui_img_astronaut13_png);   // assets\astronaut13.png
-LV_IMG_DECLARE( ui_img_astronaut14_png);   // assets\astronaut14.png
-LV_IMG_DECLARE( ui_img_astronaut2_png);   // assets\astronaut2.png
-LV_IMG_DECLARE( ui_img_astronaut3_png);   // assets\astronaut3.png
-LV_IMG_DECLARE( ui_img_astronaut4_png);   // assets\astronaut4.png
-LV_IMG_DECLARE( ui_img_astronaut5_png);   // assets\astronaut5.png
-LV_IMG_DECLARE( ui_img_astronaut6_png);   // assets\astronaut6.png
-LV_IMG_DECLARE( ui_img_astronaut7_png);   // assets\astronaut7.png
-LV_IMG_DECLARE( ui_img_astronaut8_png);   // assets\astronaut8.png
-LV_IMG_DECLARE( ui_img_astronaut9_png);   // assets\astronaut9.png
+    LV_IMG_DECLARE(ui_img_astronaut1_png);  // assets\astronaut1.png
+    LV_IMG_DECLARE(ui_img_astronaut10_png); // assets\astronaut10.png
+    LV_IMG_DECLARE(ui_img_astronaut11_png); // assets\astronaut11.png
+    LV_IMG_DECLARE(ui_img_astronaut12_png); // assets\astronaut12.png
+    LV_IMG_DECLARE(ui_img_astronaut13_png); // assets\astronaut13.png
+    LV_IMG_DECLARE(ui_img_astronaut14_png); // assets\astronaut14.png
+    LV_IMG_DECLARE(ui_img_astronaut2_png);  // assets\astronaut2.png
+    LV_IMG_DECLARE(ui_img_astronaut3_png);  // assets\astronaut3.png
+    LV_IMG_DECLARE(ui_img_astronaut4_png);  // assets\astronaut4.png
+    LV_IMG_DECLARE(ui_img_astronaut5_png);  // assets\astronaut5.png
+    LV_IMG_DECLARE(ui_img_astronaut6_png);  // assets\astronaut6.png
+    LV_IMG_DECLARE(ui_img_astronaut7_png);  // assets\astronaut7.png
+    LV_IMG_DECLARE(ui_img_astronaut8_png);  // assets\astronaut8.png
+    LV_IMG_DECLARE(ui_img_astronaut9_png);  // assets\astronaut9.png
 
-LV_FONT_DECLARE( ui_font_misans16);
-LV_FONT_DECLARE( ui_font_symbols16);
+    LV_FONT_DECLARE(ui_font_misans16);
+    LV_FONT_DECLARE(ui_font_symbols16);
 
-void ui_init(void);
+    void ui_init(void);
 
 #ifdef __cplusplus
 } /*extern "C"*/

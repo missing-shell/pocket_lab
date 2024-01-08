@@ -5,97 +5,132 @@
 
 #include "ui.h"
 
-void backlight(lv_event_t * e)
+void gpio_test_initcb(lv_event_t *e)
+{
+	led_test();
+}
+
+void isr_test_initcb(lv_event_t *e)
+{
+	isr_test();
+}
+void pwm_test_initcb(lv_event_t *e)
+{
+	pwm_test();
+}
+void uart_test_initcb(lv_event_t *e)
+{
+	uart_test_init();
+}
+
+void i2c_test_initcb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void volumesetting(lv_event_t * e)
+void spi_test_initcb(lv_event_t *e)
+{
+	spi_mutex_init();
+}
+
+void backlight(lv_event_t *e)
 {
 	// Your code here
 }
 
-void isrTestCb_0(lv_event_t * e)
+void volumesetting(lv_event_t *e)
 {
 	// Your code here
 }
 
-void isrTestCb_1(lv_event_t * e)
+void isrTestCb_1(lv_event_t *e)
+{
+	isr1_event_cb(e);
+}
+
+void isrTestCb_2(lv_event_t *e)
+{
+	isr2_event_cb(e);
+}
+
+void timeTestCb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void isrTestCb_2(lv_event_t * e)
+void pwmTestCb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void timeTestCb(lv_event_t * e)
-{
-
-}
-
-void adTestCb(lv_event_t * e)
+void clean_uartuicb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void pwmTestCb(lv_event_t * e)
+void uartKeyBoardTxCb(lv_event_t *e)
+{
+	const char *data = lv_textarea_get_text(ui_txtext);
+	char str[50];
+	sprintf(str, "%s", data);
+	uart_tx_test(str);
+}
+
+void clean_i2cuicb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void daTestCb(lv_event_t * e)
+void i2cKeyBoardTxCb(lv_event_t *e)
 {
 	// Your code here
 }
 
-void uartTestCb(lv_event_t * e)
+void clean_spiuicb(lv_event_t *e)
+{
+	clean_spiui();
+}
+
+void spiKeyBoardTxCb(lv_event_t *e)
+{
+	const char *data = lv_textarea_get_text(ui_spitxtext);
+	char str[SPI_TEST_BUF];
+	sprintf(str, "%s", data);
+
+	spi_test(str);
+}
+
+void spi_maste_initcb(lv_event_t *e)
+{
+	spi_master_init();
+}
+
+void spi_slave_initcb(lv_event_t *e)
+{
+	spi_slave_init();
+}
+
+void wifiscanf(lv_event_t *e)
 {
 	// Your code here
 }
 
-void i2cTestCb(lv_event_t * e)
+void wifistart(lv_event_t *e)
 {
 	// Your code here
 }
 
-void wifiscanf(lv_event_t * e)
+void wificlose(lv_event_t *e)
 {
 	// Your code here
 }
 
-void wifistart(lv_event_t * e)
+void wifisanf(lv_event_t *e)
 {
 	// Your code here
 }
 
-void wificlose(lv_event_t * e)
-{
-	// Your code here
-}
-
-void wifisanf(lv_event_t * e)
-{
-	// Your code here
-}
-
-void connectwifi(lv_event_t * e)
-{
-	// Your code here
-}
-
-void gpioTest(lv_event_t * e)
-{
-	// Your code here
-}
-
-void spiTestCb(lv_event_t * e)
-{
-	// Your code here
-}
-
-void mqttTestCb(lv_event_t * e)
+void connectwifi(lv_event_t *e)
 {
 	// Your code here
 }

@@ -48,7 +48,7 @@ lv_label_set_text(ui_settingtext,"设置");
 
 ui_setpannel = lv_obj_create(ui_setting);
 lv_obj_set_width( ui_setpannel, lv_pct(100));
-lv_obj_set_height( ui_setpannel, lv_pct(77));
+lv_obj_set_height( ui_setpannel, lv_pct(80));
 lv_obj_set_x( ui_setpannel, lv_pct(0) );
 lv_obj_set_y( ui_setpannel, lv_pct(10) );
 lv_obj_set_align( ui_setpannel, LV_ALIGN_TOP_MID );
