@@ -11,7 +11,7 @@
 #define EXAMPLE_ADC_GET_CHANNEL(p_data) ((p_data)->type2.channel) // 定义获取示例ADC通道的宏
 #define EXAMPLE_ADC_GET_DATA(p_data) ((p_data)->type2.data)       // 定义获取示例ADC数据的宏
 
-#define EXAMPLE_READ_LEN 512
+#define EXAMPLE_READ_LEN 256
 
 static adc_channel_t channel[2] = {ADC_CHANNEL_0}; // 定义静态 ADC通道数组
 
@@ -19,14 +19,14 @@ static TaskHandle_t s_task_handle;  // 定义静态任务句柄
 static const char *TAG = "EXAMPLE"; // 定义静态标签
 
 lv_chart_series_t *ui_pwmchart_series_1;
-
+int32_t value_array[EXAMPLE_READ_LEN];
 SemaphoreHandle_t xSemaphore = NULL;
 
 static void pwm_init(void)
 {
     ui_pwmchart_series_1 = lv_chart_add_series(ui_pwmchart, lv_palette_lighten(LV_PALETTE_GREEN, 2), LV_CHART_AXIS_PRIMARY_Y);
     lv_chart_set_zoom_x(ui_pwmchart, 256);
-    // lv_chart_set_update_mode(ui_pwmchart, LV_CHART_UPDATE_MODE_CIRCULAR); //心电图更新模式
+    lv_chart_set_update_mode(ui_pwmchart, LV_CHART_UPDATE_MODE_CIRCULAR); // 心电图更新模式
 }
 
 static bool IRAM_ATTR s_conv_done_cb(adc_continuous_handle_t handle, const adc_continuous_evt_data_t *edata, void *user_data)
@@ -44,14 +44,14 @@ static void continuous_adc_init(adc_channel_t *channel, uint8_t channel_num, adc
 
     adc_continuous_handle_cfg_t adc_config = {
         // 定义 ADC连续配置
-        .max_store_buf_size = 1024,          // 最大储存缓冲区大小
+        .max_store_buf_size = 2048,          // 最大储存缓冲区大小
         .conv_frame_size = EXAMPLE_READ_LEN, // 转换帧大小
     };
     ESP_ERROR_CHECK(adc_continuous_new_handle(&adc_config, &handle)); // 检查创建新的ADC连续句柄
 
     adc_continuous_config_t dig_cfg = {
         // 定义 ADC连续配置
-        .sample_freq_hz = 25 * 1000,        // 样本频率
+        .sample_freq_hz = 20 * 1000,        // 样本频率
         .conv_mode = EXAMPLE_ADC_CONV_MODE, // 转换模式
         .format = EXAMPLE_ADC_OUTPUT_TYPE,  // 格式
     };
@@ -93,13 +93,14 @@ static void adc_read_and_update_chart(void *pvParameters)
     { // 无限循环，主程序在此运行
 
         char unit[] = EXAMPLE_ADC_UNIT_STR(EXAMPLE_ADC_UNIT); // 单元名称字符串
-
+        int cnt = 0;
         while (1)
         {                                                                             // 嵌套循环
             ret = adc_continuous_read(handle, result, EXAMPLE_READ_LEN, &ret_num, 0); // 读取ADC连续值
             if (ret == ESP_OK)
             { // 如果读取成功
                 // ESP_LOGI("TASK", "ret is %x, ret_num is %" PRIu32 " bytes", ret, ret_num); // 打印返回值和返回数量
+
                 for (int i = 0; i < ret_num; i += SOC_ADC_DIGI_RESULT_BYTES)
                 { // 遍历结果数组
                     adc_digi_output_data_t *p = (void *)&result[i];
@@ -109,16 +110,22 @@ static void adc_read_and_update_chart(void *pvParameters)
                     // 如果通道号小于单位的最大通道数量，则数据有效
                     if (chan_num < SOC_ADC_CHANNEL_NUM(EXAMPLE_ADC_UNIT))
                     {
-                        ESP_LOGI(TAG, "Unit: %s, Channel: %" PRIu32 ", Value: %" PRIu32, unit, chan_num, data); // 打印单位、通道和值
-
+                        // ESP_LOGI(TAG, "Unit: %s cnt: %d Value: %d", unit, cnt, data); // 打印单位、通道和值
+                        if (cnt >= EXAMPLE_READ_LEN)
+                        {
+                            cnt = 0;
+                        }
+                        value_array[cnt++] = data;
                         lv_chart_set_next_value(ui_pwmchart, ui_pwmchart_series_1, data);
+                        lv_chart_refresh(ui_pwmchart);
                     }
                     else
                     {                                                                                     // 否则，数据无效
                         ESP_LOGW(TAG, "Invalid data [%s_%" PRIu32 "_%" PRIx32 "]", unit, chan_num, data); // 打印无效数据
                     }
                 }
-                lv_chart_refresh(ui_pwmchart);
+                // lv_chart_set_ext_y_array(ui_pwmchart, ui_pwmchart_series_1, value_array);
+
                 // delay to avoid task watchdog timeout
                 vTaskDelay(100); // 延迟1ms
             }
@@ -133,17 +140,17 @@ static void adc_read_and_update_chart(void *pvParameters)
     ESP_ERROR_CHECK(adc_continuous_stop(handle));   // 检查停止ADC连续转换的结果
     ESP_ERROR_CHECK(adc_continuous_deinit(handle)); // 检查取消初始化ADC连续转换的结果
 }
+static void pwm_timer_cb(void)
+{
 
+    // memset(value_array, 0, sizeof(value_array));
+}
 void pwm_test(void)
 {
-    xSemaphore = xSemaphoreCreateBinary();
-    if (xSemaphore != NULL)
-    {
-        xSemaphoreGive(xSemaphore);
-    }
 
     pwm_init();
 
     // Create the task
-    xTaskCreate(adc_read_and_update_chart, "adc_read_and_update_chart", 4096, NULL, 10, 1);
+    xTaskCreate(adc_read_and_update_chart, "adc_read_and_update_chart", 4096, NULL, 10, NULL);
+    lv_timer_create(pwm_timer_cb, 5, NULL);
 }

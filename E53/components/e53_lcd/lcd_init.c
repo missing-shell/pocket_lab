@@ -1,4 +1,4 @@
-#include"lcd_init.h"
+#include "lcd_init.h"
 
 static const char *TAG = "E53_LCD";
 
@@ -254,9 +254,6 @@ void e53_lcd_init(void)
     lv_indev_drv_register(&indev_drv);
 
     ESP_LOGI(TAG, "Display LVGL");
-    
-    //ui_init();
-   
-}
 
- 
+    // ui_init();
+}

@@ -95,5 +95,15 @@ static void timer_init(void)
 void ad_test(void)
 {
     ad_init();
+    e53_adc_init();
+
+    // ADC1配置
+    adc_oneshot_chan_cfg_t config = {
+        // 定义ADC1通道配置
+        .bitwidth = ADC_BITWIDTH_DEFAULT, // 设置位宽为默认值
+        .atten = 13,                      // 设置衰减值
+    };
+    ESP_ERROR_CHECK(adc_oneshot_config_channel(e53_adc_get_handle(), ADC_CHANNEL_0, &config)); // 配置ADC1通道0
+
     timer_init();
 }

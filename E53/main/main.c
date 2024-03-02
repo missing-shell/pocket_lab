@@ -55,8 +55,8 @@ void app_main(void)
 
     printf("-------------------yes------------------------------------\n");
 
-    ad_test();
-    // da_test();
+    // ad_test();
+    //  da_test();
     while (1)
     {
         // raise the task priority of LVGL and/or reduce the handler period can improve the performance

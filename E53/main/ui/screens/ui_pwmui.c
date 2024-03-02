@@ -62,7 +62,7 @@ void ui_pwmui_screen_init(void)
     lv_obj_set_y(ui_pwmchart, -6);
     lv_obj_set_align(ui_pwmchart, LV_ALIGN_CENTER);
     lv_chart_set_type(ui_pwmchart, LV_CHART_TYPE_LINE);
-    lv_chart_set_point_count(ui_pwmchart, 280);
+    lv_chart_set_point_count(ui_pwmchart, 96);
     lv_chart_set_range(ui_pwmchart, LV_CHART_AXIS_PRIMARY_Y, 0, 4095);
     lv_chart_set_range(ui_pwmchart, LV_CHART_AXIS_SECONDARY_Y, 0, 0);
     lv_chart_set_div_line_count(ui_pwmchart, 20, 40);

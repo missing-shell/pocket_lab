@@ -11,7 +11,7 @@
 #define EXAMPLE_ADC_GET_CHANNEL(p_data) ((p_data)->type2.channel) // 定义获取示例ADC通道的宏
 #define EXAMPLE_ADC_GET_DATA(p_data) ((p_data)->type2.data)       // 定义获取示例ADC数据的宏
 
-#define READ_LEN 512
+#define READ_LEN 1024
 static adc_channel_t channel[2] = {ADC_CHANNEL_0}; // 定义静态 ADC通道数组
 
 static TaskHandle_t s_task_handle; // 定义静态任务句柄
@@ -49,7 +49,7 @@ static void continuous_adc_init(adc_channel_t *channel, uint8_t channel_num, adc
 
     adc_continuous_config_t dig_cfg = {
         // 定义 ADC连续配置
-        .sample_freq_hz = 80 * 1000,        // 样本频率
+        .sample_freq_hz = 20 * 1000,        // 样本频率
         .conv_mode = EXAMPLE_ADC_CONV_MODE, // 转换模式
         .format = EXAMPLE_ADC_OUTPUT_TYPE,  // 格式
     };
@@ -110,7 +110,7 @@ void da_task(void *parameter)
                     // 如果通道号小于单位的最大通道数量，则数据有效
                     if (chan_num < SOC_ADC_CHANNEL_NUM(EXAMPLE_ADC_UNIT))
                     {
-                        // ESP_LOGI("da", "Unit: %s, Channel: %" PRIu32 ", Value: %" PRIu32, unit, chan_num, data); // 打印单位、通道和值
+                        ESP_LOGI("da", "data_count: %d, Channel: %" PRIu32 ", Value: %" PRIu32, data_count, chan_num, data); // 打印单位、通道和值
 
                         line_arr[data_count].x = data_count;
                         line_arr[data_count].y = 4095 - data;
@@ -125,7 +125,7 @@ void da_task(void *parameter)
                 lv_line_set_points(line_obj, line_arr, sizeof(line_arr) / sizeof(line_arr[0])); // 设置点波形
 
                 // delay to avoid task watchdog timeout
-                vTaskDelay(10); // 延迟1ms
+                vTaskDelay(5); // 延迟1ms
             }
             else if (ret == ESP_ERR_TIMEOUT)
             { // 如果读取超时
