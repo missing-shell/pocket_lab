@@ -56,7 +56,15 @@ void app_main(void)
     printf("-------------------yes------------------------------------\n");
 
     // ad_test();
-    //  da_test();
+    // da_test();
+    // raise the task priority of LVGL and/or reduce the handler period can improve the performance
+    vTaskDelay(pdMS_TO_TICKS(10));
+    // The task running lv_timer_handler should have lower priority than that running `lv_tick_inc`
+    lv_timer_handler();
+
+    // extern void test_sample_init_task(void *pvParameters);
+    // xTaskCreate(test_sample_init_task, "TestSampleInitTask", 4096, NULL, 2, NULL);
+
     while (1)
     {
         // raise the task priority of LVGL and/or reduce the handler period can improve the performance
