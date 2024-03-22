@@ -1,0 +1,3 @@
+[submodule "E53/components/task_list"]
+	path = E53/components/task_list
+	url = git@github.com:missing-shell/task_list.git
