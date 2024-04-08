@@ -28,7 +28,8 @@
         "gpio_test.h": "c",
         "pwm_test.h": "c",
         "adc_continuous.h": "c",
-        "logic_analyzer_const_definition.h": "c"
+        "logic_analyzer_const_definition.h": "c",
+        "esp_event.h": "c"
     },
     "C_Cpp.default.compilerPath": "E:\\Espressif\\v5.1.1\\.espressif\\tools\\xtensa-esp32s3-elf\\esp-12.2.0_20230208\\xtensa-esp32s3-elf\\bin\\xtensa-esp32s3-elf-gcc.exe",
     "idf.portWin": "COM8",

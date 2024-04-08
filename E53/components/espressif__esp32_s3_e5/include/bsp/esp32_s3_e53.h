@@ -55,7 +55,6 @@
 #define E53_I2C_NUM (0)
 #define E53_I2C_SCL (GPIO_NUM_41)
 #define E53_I2C_SDA (GPIO_NUM_42)
-#define BSP_I2C_NUM (CONFIG_BSP_I2C_NUM)
 
 /*SPI*/
 #define E53_SPI_HOST (SPI3_HOST)
