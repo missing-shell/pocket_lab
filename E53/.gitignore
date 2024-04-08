@@ -3,3 +3,4 @@
 **/.devcontainer/
 **/sdkconfig
 **/sdkconfig.old
+**/sdkconfig.defaults
