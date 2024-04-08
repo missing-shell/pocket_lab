@@ -9,5 +9,5 @@ idf_component_register( SRCS
                             ${SRC_LAB}
                         INCLUDE_DIRS 
                             "." "ui" "lab/include"
-                        
+                        REQUIRES task_list logic_analyzer lvgl esp32_s3_e5
 )
